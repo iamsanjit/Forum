@@ -4,17 +4,25 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Thread;
 
 class ThreadsTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
+    /** @test */
     public function a_user_can_see_all_threads()
     {
-        $this->get('threads');
-        $this->assertStatusCode(200);
+        $thread = factory(Thread::class)->create();
+
+        $response = $this->get('threads');
+        $response->assertSee($thread->title);
+    }
+
+    /** @test */
+    public function a_user_can_see_single_thread()
+    {
+        $thread = factory(Thread::class)->create();
+
+        $response = $this->get('threads/' . $thread->id);
+        $response->assertSee($thread->title);
     }
 }
