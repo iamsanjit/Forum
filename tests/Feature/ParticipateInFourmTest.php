@@ -20,7 +20,7 @@ class ParticipateInFourmTest extends TestCase
     {
         parent::setUp();
 
-        $this->thread = factory(Thread::class)->create();
+        $this->thread = create(Thread::class);
     }
 
     /** @test */
@@ -28,9 +28,9 @@ class ParticipateInFourmTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $this->be(factory(User::class)->create());
+        $this->signIn();
 
-        $reply = factory(Reply::class)->make();
+        $reply = make(Reply::class);
 
         $response = $this->post("threads/{$this->thread->id}/replies", $reply->toArray());
         

@@ -20,13 +20,13 @@ class ThreadTest extends TestCase
     {
         parent::setUp();
         
-        $this->thread = factory(Thread::class)->create();
+        $this->thread = create(Thread::class);
     }
 
     /** @test */
     public function a_thread_can_have_many_replies()
     {
-        $reply = factory(Reply::class)->create(['thread_id' => $this->thread->id]);
+        $reply = create(Reply::class, ['thread_id' => $this->thread->id]);
 
         $this->assertInstanceOf(Reply::class, $this->thread->replies->first());
         $this->assertEquals(1, $this->thread->replies->count());
@@ -41,7 +41,7 @@ class ThreadTest extends TestCase
     /** @test */
     public function a_thread_can_add_reply()
     {
-        $reply = factory(Reply::class)->make();
+        $reply = make(Reply::class);
 
         $this->thread->addReply($reply->toArray());
 
