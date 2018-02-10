@@ -18,5 +18,27 @@
             @endforeach
         </div>
     </div>
+
+    @if (auth()->check())
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <form method="POST" action="{{ route('replies.store', $thread->id) }}">
+                    {{ csrf_field() }}
+                    <div class="form-group">
+                        <textarea
+                            class="form-control"
+                            name="body"
+                            id="body"
+                            rows="4"
+                            placeholder="have to say something?"
+                        ></textarea>
+                    </div>
+                    <input type="submit" value="Reply">
+                </form>
+            </div>
+        </div>
+    @else
+        <p class="text-center">Please <a href="{{ route('login') }}">sign in</a> to participate in discussion.</p>
+    @endif
 </div>
 @endsection

@@ -33,7 +33,6 @@ class ParticipateInFourmTest extends TestCase
         $reply = factory(Reply::class)->make();
 
         $response = $this->post("threads/{$this->thread->id}/replies", $reply->toArray());
-        $response->assertStatus(200);
         
         $this->get($this->thread->path())
             ->assertSee($reply->body);

@@ -18,5 +18,6 @@ class RepliesController extends Controller
             'body' => request('body'),
             'user_id' => auth()->id()
         ]);
+        return back();
     }
 }
