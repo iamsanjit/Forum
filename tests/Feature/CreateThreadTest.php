@@ -23,7 +23,7 @@ class CreateThreadTest extends TestCase
 
         $this->post('threads', $thread->toArray());
 
-        $this->get($thread->path())
+        $this->get(route('threads.show', [$thread->channel->name, 1]))
             ->assertSee($thread->title)
             ->assertSee($thread->body);
     }

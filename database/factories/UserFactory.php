@@ -13,7 +13,7 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(App\User::class, function (Faker $faker) { 
+$factory->define(App\User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
@@ -26,6 +26,7 @@ $factory->define(App\User::class, function (Faker $faker) {
 $factory->define(App\Thread::class, function (Faker $faker) {
     return [
         'user_id' => factory(App\User::class)->create()->id,
+        'channel_id' => factory(App\Channel::class)->create()->id,
         'title' => $faker->sentence(),
         'body' => $faker->paragraph(),
     ];
@@ -37,5 +38,13 @@ $factory->define(App\Reply::class, function (Faker $faker) {
         'user_id' => factory(App\User::class)->create()->id,
         'thread_id' => factory(App\User::class)->create()->id,
         'body' => $faker->paragraph(),
+    ];
+});
+
+
+$factory->define(App\Channel::class, function (Faker $faker) {
+    return [
+        'name' => $faker->word(),
+        'slug' => $faker->word(),
     ];
 });

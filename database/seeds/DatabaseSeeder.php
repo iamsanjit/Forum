@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             factory(Reply::class, 10)->create(['thread_id' => $thread->id]);
         }
 
-        factory(User::class, 1)->create([
+        factory(App\User::class, 1)->create([
             'name' => 'Jane Doe',
             'email' => 'jane.doe@example.com',
             'password' => bcrypt('password')
