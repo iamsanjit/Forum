@@ -6,9 +6,12 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Thread;
 use App\Reply;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class ThreadsTest extends TestCase
 {
+    use DatabaseMigrations;
+    
     protected $thread;
 
     protected function setUp()
