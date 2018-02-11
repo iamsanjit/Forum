@@ -15,9 +15,9 @@
 
                         <div class="form-group">
                             <label for="title">Select channel</label>
-                            <select class="form-control" name="channel_id" id="channel_id">
+                            <select class="form-control" name="channel_id" id="channel_id" required>
                                 <option value="">Choose one ..</option>
-                                @foreach(App\Channel::all() as $channel)
+                                @foreach($channels as $channel)
                                     <option value="{{ $channel->id }}" {{ old('channel_id') == $channel->id ? 'selected' : ''}}>{{ $channel->name }}</option>
                                 @endforeach
                             </select>
@@ -25,12 +25,12 @@
 
                         <div class="form-group">
                             <label for="title">Title</label>
-                            <input type="text" name="title" class="form-control" value="{{ old('title') }}">
+                            <input type="text" name="title" class="form-control" value="{{ old('title') }}" required>
                         </div>
 
                         <div class="form-group">
                             <label for="body">Body</label>
-                            <textarea type="text" name="body" class="form-control" rows="5">{{ old('body') }}</textarea>
+                            <textarea type="text" name="body" class="form-control" rows="5" required>{{ old('body') }}</textarea>
                         </div>
 
                         <div class="form-group">
