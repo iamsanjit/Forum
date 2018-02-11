@@ -32,10 +32,21 @@ class ParticipateInFourmTest extends TestCase
 
         $reply = make(Reply::class);
 
-        $response = $this->post("threads/{$this->thread->id}/replies", $reply->toArray());
+        $response = $this->post($this->thread->path() . '/replies', $reply->toArray());
         
         $this->get($this->thread->path())
             ->assertSee($reply->body);
+    }
+
+    /** @test */
+    public function a_valid_reply_body_is_required()
+    {
+        $this->signIn();
+
+        $reply = make(Reply::class, ['body' => null]);
+
+        $this->post($this->thread->path() . '/replies', $reply->toArray())
+            ->assertSessionHasErrors('body');
     }
 
     /** @test */
@@ -43,6 +54,6 @@ class ParticipateInFourmTest extends TestCase
     {
         $this->expectException(AuthenticationException::class);
         $this->withoutExceptionHandling();
-        $this->post('threads/1/replies', []);
+        $this->post($this->thread->path() . '/replies', []);
     }
 }

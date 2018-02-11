@@ -29,14 +29,17 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
+                        {{ config('app.name', 'Fourm') }}
                     </a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        <li><a href="{{ route('threads.index') }}">Threads</a></li>
+                        @auth
+                            <li><a href="{{ route('threads.create') }}">Create new thread</a></li>
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->

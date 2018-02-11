@@ -22,7 +22,7 @@
     @if (auth()->check())
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-                <form method="POST" action="{{ route('replies.store', $thread->id) }}">
+                <form method="POST" action="{{ $thread->path() . '/replies' }}">
                     {{ csrf_field() }}
                     <div class="form-group">
                         <textarea
