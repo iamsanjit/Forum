@@ -6,7 +6,7 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                     <div class="panel-heading">
-                        {{ $thread->title }}
+                        {{ $thread->creator->name }} posted: {{ $thread->title }}
                     </div>
                     <div class="panel-body">
                         {{ $thread->body }}

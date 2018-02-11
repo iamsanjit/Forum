@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\Thread;
 use App\Reply;
 use App\Channel;
+use App\User;
 
 class ThreadsTest extends TestCase
 {
@@ -61,5 +62,21 @@ class ThreadsTest extends TestCase
             ->assertStatus(200)
             ->assertSee($threadInChannel->title)
             ->assertDontSee($threadNotInChannel->title);
+    }
+
+    /** @test */
+    public function a_user_can_filter_thread_by_any_username()
+    {
+        $this->withoutExceptionHandling();
+        $john = create(User::class, ['name' => 'John']);
+        
+        $this->signIn($john);
+
+        $threadByJohn = create(Thread::class, ['user_id' => $john->id]);
+        $threadNotByJohn = create(Thread::class);
+
+        $this->get('threads?by=' . $john->name)
+            ->assertSee($threadByJohn->title)
+            ->assertDontSee($threadNotByJohn->title);
     }
 }
