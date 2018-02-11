@@ -37,9 +37,21 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
                         <li><a href="{{ route('threads.index') }}">Threads</a></li>
+                        
                         @auth
                             <li><a href="{{ route('threads.create') }}">Create new thread</a></li>
                         @endauth
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Channels<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" style="max-height:300px; overflow:scroll;">
+                               @foreach (App\Channel::all() as $channel)
+                                    <li><a href="{{'/threads/' . $channel->slug}}">{{$channel->name}}</a></li>
+                                @endforeach
+                            </ul>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
