@@ -3,12 +3,19 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\User;
-use App\Reply;
 
 class Thread extends Model
 {
     protected $guarded = [];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::addGlobalScope(function ($builder) {
+            return $builder->withCount('replies');
+        });
+    }
 
     public function path()
     {
