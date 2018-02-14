@@ -8,6 +8,7 @@ abstract class Filter
 {
     protected $filters = [];
     protected $request;
+    protected $query;
 
     public function __construct(Request $request)
     {
@@ -16,12 +17,15 @@ abstract class Filter
 
     public function apply($query)
     {
+        $this->query = $query;
+
         foreach ($this->getFilters() as $filter => $value) {
             if (method_exists($this, $filter)) {
-                $query = $this->$filter($query);
+                $this->$filter($value);
             }
         }
-        return $query;
+
+        return $this->query;
     }
 
     protected function getFilters()

@@ -11,9 +11,9 @@ class ThreadFilter extends Filter
     /**
      * Filter the threads by given username
      */
-    public function by($query)
+    public function by($username)
     {
-        $user = User::where(['name' => $this->request->get('by')])->firstOrFail();
-        return $query->where('user_id', $user->id);
+        $user = User::where(['name' => $username])->firstOrFail();
+        return $this->query->where('user_id', $user->id);
     }
 }

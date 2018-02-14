@@ -37,6 +37,11 @@ class Thread extends Model
         $this->replies()->create($reply);
     }
 
+    public function getFormattedRepliesAttribute()
+    {
+        return $this->replies_count . ' ' .str_plural('reply', $this->replies_count);
+    }
+
     public function channel()
     {
         return $this->belongsTo(Channel::class);

@@ -43,7 +43,7 @@
             <div class="panel panel-default">
                     <div class="panel-body">
                         This thread was published {{$thread->created_at->diffForHumans()}}
-                        and currenty have {{$thread->replies_count}} {{ str_plural('reply', $thread->replies_count)}}.
+                        and currenty have {{$thread->formatted_replies}}.
                     </div>
             </div>
         </div>
