@@ -15,7 +15,7 @@
                                 <a href="{{ $thread->path() }}">{{ $thread->title }}</a>
                                 by <a href="#">{{ $thread->creator->name }}</a>
                             </h5>
-                            <strong>{{ $thread->formatted_replies }}</strong>    
+                            <strong><a href="{{ $thread->path()}}">{{ $thread->formatted_replies }}</a></strong>    
                         </div>
                             {{ $thread->body }}
                         <hr>

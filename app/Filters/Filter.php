@@ -8,16 +8,16 @@ abstract class Filter
 {
     protected $filters = [];
     protected $request;
-    protected $query;
+    protected $builder;
 
     public function __construct(Request $request)
     {
         $this->request = $request;
     }
 
-    public function apply($query)
+    public function apply($builder)
     {
-        $this->query = $query;
+        $this->builder = $builder;
 
         foreach ($this->getFilters() as $filter => $value) {
             if (method_exists($this, $filter)) {
@@ -25,7 +25,7 @@ abstract class Filter
             }
         }
 
-        return $this->query;
+        return $this->builder;
     }
 
     protected function getFilters()

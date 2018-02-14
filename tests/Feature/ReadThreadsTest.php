@@ -10,6 +10,7 @@ use App\Thread;
 use App\Reply;
 use App\Channel;
 use App\User;
+use Carbon\Carbon;
 
 class ThreadsTest extends TestCase
 {
@@ -75,5 +76,21 @@ class ThreadsTest extends TestCase
         $this->get('threads?by=' . $john->name)
             ->assertSee($threadByJohn->title)
             ->assertDontSee($threadNotByJohn->title);
+    }
+
+    /** @test */
+    public function a_user_can_filter_thread_by_popularity()
+    {
+        $this->withoutExceptionHandling();
+        $threadWithTwoReplies = create(Thread::class, ['created_at' => Carbon::parse('-7 Hour')]);
+        create(Reply::class, ['thread_id' => $threadWithTwoReplies->id], 2);
+
+        $threadWithThreeReplies = create(Thread::class, ['created_at' => Carbon::parse('-5 Hour')]);
+        create(Reply::class, ['thread_id' => $threadWithThreeReplies->id], 3);
+
+        $threadWithNoReplies = $this->thread;
+
+        $response = $this->getJson('threads?popular=1')->json();
+        $this->assertEquals([3, 2, 0], array_column($response, 'replies_count'));
     }
 }
