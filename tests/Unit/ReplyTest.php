@@ -20,4 +20,15 @@ class ReplyTest extends TestCase
 
         $this->assertInstanceOf(User::class, $reply->owner);
     }
+
+    /** @test */
+    public function a_reply_can_be_favorited_by_authenticated_user()
+    {
+        $this->signIn();
+
+        $reply = create(Reply::class);
+        $this->post("/replies/{$reply->id}/favorites");
+        
+        $this->assertTrue($reply->isFavorited());
+    }
 }

@@ -30,7 +30,7 @@ class FavoritesTest extends TestCase
         $reply = create(Reply::class);
 
         $this->post("/replies/{$reply->id}/favorites")
-            ->assertStatus(201);
+            ->assertStatus(200);
         
         $this->assertEquals(1, $reply->favorites()->count());
     }
@@ -44,7 +44,7 @@ class FavoritesTest extends TestCase
 
         $this->post("/replies/{$reply->id}/favorites");
         $this->post("/replies/{$reply->id}/favorites");
-        
-        $this->assertEquals(1, $reply->favorites()->count());
+
+        $this->assertEquals(1, $reply->fresh()->favorites()->count());
     }
 }
