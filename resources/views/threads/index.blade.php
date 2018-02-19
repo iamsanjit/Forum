@@ -13,7 +13,6 @@
                         <div class="level">
                             <h5>
                                 <a href="{{ $thread->path() }}">{{ $thread->title }}</a>
-                                by <a href="#">{{ $thread->creator->name }}</a>
                             </h5>
                             <strong><a href="{{ $thread->path()}}">{{ $thread->formatted_replies }}</a></strong>    
                         </div>

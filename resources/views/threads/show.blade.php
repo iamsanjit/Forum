@@ -15,7 +15,7 @@
             </div>
 
             @foreach ($thread->replies as $reply)
-                @include ('threads.thread')
+                @include ('threads.reply')
             @endforeach
 
             @if (auth()->check())

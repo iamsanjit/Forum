@@ -25,12 +25,13 @@ class FavoritesTest extends TestCase
     /** @test */
     public function an_authorized_user_can_favorite_a_reply()
     {
+        $this->withoutExceptionHandling();
+
         $this->signIn();
         
         $reply = create(Reply::class);
 
-        $this->post("/replies/{$reply->id}/favorites")
-            ->assertStatus(200);
+        $this->post("/replies/{$reply->id}/favorites");
         
         $this->assertEquals(1, $reply->favorites()->count());
     }
