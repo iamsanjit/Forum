@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Thread;
 use App\Channel;
-use App\User;
+use Illuminate\Support\Facades\Auth;
 use App\Filters\ThreadFilter;
 
 class ThreadsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->only('store', 'create');
+        $this->middleware('auth')->except('index', 'show');
     }
 
     public function index(Channel $channel, ThreadFilter $filters)
@@ -58,5 +58,15 @@ class ThreadsController extends Controller
         ]);
 
         return redirect($thread->path());
+    }
+
+    public function destroy(Thread $thread)
+    {
+        if (!Auth::user()->can('update', $thread)) {
+            abort(403, 'You are not authorized for this action.');
+        }
+
+        $thread->delete();
+        return redirect('threads');
     }
 }

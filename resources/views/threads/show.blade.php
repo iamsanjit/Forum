@@ -5,14 +5,7 @@
     <div class="row">
         <div class="col-md-8 ">
 
-            <div class="panel panel-default">
-                    <div class="panel-heading">
-                        {{ $thread->creator->name }} posted: {{ $thread->title }}
-                    </div>
-                    <div class="panel-body">
-                        {{ $thread->body }}
-                    </div>
-            </div>
+           @include('threads.thread')  
 
             @foreach ($thread->replies as $reply)
                 @include ('threads.reply')

@@ -3,12 +3,10 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-
 use App\Thread;
 use App\Channel;
+use App\User;
 
 class CreateThreadTest extends TestCase
 {
@@ -35,7 +33,7 @@ class CreateThreadTest extends TestCase
     {
         $this->get(route('threads.create'))
             ->assertRedirect('login');
-    
+
         $this->post('/threads')
             ->assertRedirect('login');
     }
@@ -58,12 +56,57 @@ class CreateThreadTest extends TestCase
     public function a_valid_channel_id_is_required()
     {
         $channel = create(Channel::class);
-        
+
         $this->publishThread(['channel_id' => null])
             ->assertSessionHasErrors('channel_id');
 
         $this->publishThread(['channel_id' => 9999])
             ->assertSessionHasErrors('channel_id');
+    }
+
+    /** @test */
+    public function unauthorized_user_can_not_delete_a_thread()
+    {
+        $thread = create(Thread::class);
+
+        $this->delete('/threads/' . $thread->id)
+            ->assertRedirect('login');
+
+        $this->signIn();
+
+        $this->delete('/threads/' . $thread->id)
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function authorized_user_can_delete_a_thread()
+    {
+        $user = $this->signIn();
+        $thread = create(Thread::class, ['user_id' => $user->id]);
+
+        $this->delete('/threads/' . $thread->id)
+            ->assertRedirect('/threads');
+
+        $this->assertDatabaseMissing('threads', ['thread_id' => $thread->id]);
+    }
+
+    /** @test */
+    public function super_user_can_delete_any_thread()
+    {
+        $user = create(User::class, ['name' => 'Jane Doe']);
+        $this->signIn($user);
+        $thread = create(Thread::class);
+
+        $this->delete('/threads/' . $thread->id)
+            ->assertRedirect('/threads');
+
+        $this->assertDatabaseMissing('threads', ['thread_id' => $thread->id]);
+    }
+
+    /** @test */
+    public function replies_associate_with_thread_delete_along_with_thread()
+    {
+        // Write you code here
     }
 
     protected function publishThread($overrides = [])
