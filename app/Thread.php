@@ -17,6 +17,11 @@ class Thread extends Model
         self::addGlobalScope(function ($builder) {
             return $builder->withCount('replies');
         });
+
+        Thread::deleting(function ($thread) {
+           $thread->replies()->delete();
+        });
+
     }
 
     public function path()
@@ -53,4 +58,5 @@ class Thread extends Model
     {
         return $filters->apply($query);
     }
+
 }

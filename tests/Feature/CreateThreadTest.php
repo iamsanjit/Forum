@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\Thread;
 use App\Channel;
 use App\User;
+use App\Reply;
 
 class CreateThreadTest extends TestCase
 {
@@ -106,7 +107,15 @@ class CreateThreadTest extends TestCase
     /** @test */
     public function replies_associate_with_thread_delete_along_with_thread()
     {
-        // Write you code here
+        $user = $this->signIn();
+
+        $thread = create(Thread::class, ['user_id' => $user->id]);
+        $reply = create(Reply::class, ['thread_id' => $thread]);
+
+        $this->delete('/threads/' . $thread->id)
+            ->assertRedirect('/threads');
+
+        $this->assertEquals(0, $thread->replies()->count());
     }
 
     protected function publishThread($overrides = [])

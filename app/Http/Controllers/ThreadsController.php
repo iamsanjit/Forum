@@ -65,8 +65,9 @@ class ThreadsController extends Controller
         if (!Auth::user()->can('update', $thread)) {
             abort(403, 'You are not authorized for this action.');
         }
-
+        
         $thread->delete();
+
         return redirect('threads');
     }
 }
