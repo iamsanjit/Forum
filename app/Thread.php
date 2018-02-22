@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Thread extends Model
 {
@@ -18,8 +19,19 @@ class Thread extends Model
             return $builder->withCount('replies');
         });
 
-        Thread::deleting(function ($thread) {
+        self::deleting(function ($thread) {
            $thread->replies()->delete();
+        });
+
+        self::created(function($thread) {
+            if (Auth::check()) {
+                Activity::create([
+                    'type' => 'created_thread',
+                    'user_id' => auth()->id(),
+                    'subject_id' => $thread->id,
+                    'subject_type' => Thread::class
+                ]);
+            }
         });
 
     }
