@@ -8,6 +8,8 @@ use App\Favorite;
 
 class Reply extends Model
 {
+    use RecordActivity;
+
     protected $guarded = [];
 
     protected $with = ['owner', 'favorites'];

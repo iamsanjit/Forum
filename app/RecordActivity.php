@@ -17,7 +17,7 @@ trait RecordActivity
     {
         if (auth()->check()) {
             $this->activity()->create([
-                'type' =>  $this->getActivityType('created'),
+                'type' =>  $this->getActivityType($event),
                 'user_id' => auth()->id(),
             ]);
         }
