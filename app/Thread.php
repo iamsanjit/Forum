@@ -3,10 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class Thread extends Model
 {
+    use RecordActivity;
+
     protected $guarded = [];
 
     protected $with = ['creator', 'channel'];
@@ -20,25 +21,8 @@ class Thread extends Model
         });
 
         self::deleting(function ($thread) {
-           $thread->replies()->delete();
+            $thread->replies()->delete();
         });
-
-        self::created(function($thread) {
-            $thread->recordActivity('created');
-        });
-
-    }
-
-    protected function recordActivity($event)
-    {
-        if (Auth::check()) {
-            Activity::create([
-                'type' =>  $event . '_' . strtolower(class_basename($this)),
-                'user_id' => auth()->id(),
-                'subject_id' => $this->id,
-                'subject_type' => get_class($this)
-            ]);
-        }
     }
 
     public function path()
@@ -75,5 +59,4 @@ class Thread extends Model
     {
         return $filters->apply($query);
     }
-
 }

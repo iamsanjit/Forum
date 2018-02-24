@@ -7,8 +7,6 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\Activity;
 
-
-
 class ActivitiesTest extends TestCase
 {
     use DatabaseMigrations;
@@ -22,7 +20,6 @@ class ActivitiesTest extends TestCase
             ->assertRedirect('login');
 
         $this->assertEquals(0, Activity::count());
-        
     }
     /** @test */
     public function it_records_the_activity_when_thread_is_created()
@@ -37,5 +34,9 @@ class ActivitiesTest extends TestCase
             'subject_id' => $thread->id,
             'subject_type' => Thread::class
         ]);
+
+        $activity = Activity::first();
+
+        $this->assertEquals($thread->id, $activity->subject->id);
     }
 }
