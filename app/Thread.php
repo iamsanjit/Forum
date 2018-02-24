@@ -24,16 +24,21 @@ class Thread extends Model
         });
 
         self::created(function($thread) {
-            if (Auth::check()) {
-                Activity::create([
-                    'type' => 'created_thread',
-                    'user_id' => auth()->id(),
-                    'subject_id' => $thread->id,
-                    'subject_type' => Thread::class
-                ]);
-            }
+            $thread->recordActivity('created');
         });
 
+    }
+
+    protected function recordActivity($event)
+    {
+        if (Auth::check()) {
+            Activity::create([
+                'type' =>  $event . '_' . strtolower(class_basename($this)),
+                'user_id' => auth()->id(),
+                'subject_id' => $this->id,
+                'subject_type' => get_class($this)
+            ]);
+        }
     }
 
     public function path()
