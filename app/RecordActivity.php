@@ -8,11 +8,15 @@ trait RecordActivity
 {
     protected static function bootRecordActivity()
     {
-        foreach (self::getActivitiesToRecord() as $event) {
-            self::$event(function ($model) use ($event) {
+        foreach (static::getActivitiesToRecord() as $event) {
+            static::$event(function ($model) use ($event) {
                 $model->recordActivity($event);
             });
         }
+
+        static::deleting(function ($model) {
+            $model->activity()->delete();
+        });
     }
 
     protected static function getActivitiesToRecord()

@@ -8,6 +8,7 @@ use App\Thread;
 use App\Channel;
 use App\User;
 use App\Reply;
+use App\Activity;
 
 class CreateThreadTest extends TestCase
 {
@@ -83,12 +84,29 @@ class CreateThreadTest extends TestCase
     public function authorized_user_can_delete_a_thread()
     {
         $user = $this->signIn();
+
         $thread = create(Thread::class, ['user_id' => $user->id]);
+        $reply = create(Reply::class, ['thread_id' => $thread]);
+
+        $this->assertEquals(2, Activity::count());
 
         $this->delete('/threads/' . $thread->id)
             ->assertRedirect('/threads');
 
         $this->assertDatabaseMissing('threads', ['thread_id' => $thread->id]);
+        $this->assertDatabaseMissing('replies', ['reply_id' => $reply->id]);
+        
+        $this->assertDatabaseMissing('activities', [
+            'subject_id' => $thread->id,
+            'subject_type' => get_class($thread)
+        ]);
+
+        $this->assertDatabaseMissing('activities', [
+            'subject_id' => $reply->id,
+            'subject_type' => get_class($reply)
+        ]);
+        
+        // $this->assertEquals(0, Activity::count());
     }
 
     /** @test */
@@ -96,27 +114,20 @@ class CreateThreadTest extends TestCase
     {
         $user = create(User::class, ['name' => 'Jane Doe']);
         $this->signIn($user);
+        
         $thread = create(Thread::class);
 
+        $this->assertEquals(1, Activity::count());
+        
         $this->delete('/threads/' . $thread->id)
             ->assertRedirect('/threads');
 
         $this->assertDatabaseMissing('threads', ['thread_id' => $thread->id]);
+
+        $this->assertEquals(0, Activity::count());
     }
 
-    /** @test */
-    public function replies_associate_with_thread_delete_along_with_thread()
-    {
-        $user = $this->signIn();
-
-        $thread = create(Thread::class, ['user_id' => $user->id]);
-        $reply = create(Reply::class, ['thread_id' => $thread]);
-
-        $this->delete('/threads/' . $thread->id)
-            ->assertRedirect('/threads');
-
-        $this->assertEquals(0, $thread->replies()->count());
-    }
+    
 
     protected function publishThread($overrides = [])
     {
