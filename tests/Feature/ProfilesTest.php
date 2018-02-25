@@ -23,14 +23,14 @@ class ProfilesTest extends TestCase
     }
 
     /** @test */
-    public function it_contains_thread_belongs_to_profile_user()
-    {
-        $this->withoutExceptionHandling();
+    // public function it_contains_thread_belongs_to_profile_user()
+    // {
+    //     $this->withoutExceptionHandling();
 
-        $user = create(User::class);
-        $thread = create(Thread::class, ['user_id' => $user->id]);
+    //     $user = create(User::class);
+    //     $thread = create(Thread::class, ['user_id' => $user->id]);
 
-        $this->get('profiles/' . $user->name)
-            ->assertSee($thread->title);
-    }
+    //     $this->get('profiles/' . $user->name)
+    //         ->assertSee($thread->title);
+    // }
 }
