@@ -15,7 +15,9 @@
             @foreach($activities as $date => $activitiesGroup)
                 <div class="page-header">{{$date}}</div>
                 @foreach($activitiesGroup as $activity)
-                    @include("profiles.activities.{$activity->type}")
+                    @if(view()->exists("profiles.activities.{$activity->type}"))
+                        @include("profiles.activities.{$activity->type}")
+                    @endIf
                 @endforeach
             @endforeach
         </div>
