@@ -68,6 +68,7 @@ class ThreadsController extends Controller
         
         $thread->delete();
 
-        return redirect('threads');
+        return redirect('threads')
+            ->with('flash', 'A Thread has been deleted');
     }
 }

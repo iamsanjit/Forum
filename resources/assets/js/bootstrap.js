@@ -1,17 +1,19 @@
 
 window._ = require('lodash');
 
+window.Vue = require('vue');
+
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This
  * code may be modified to fit the specific needs of your application.
  */
 
-try {
-    window.$ = window.jQuery = require('jquery');
+// try {
+//     window.$ = window.jQuery = require('jquery');
 
-    require('bootstrap-sass');
-} catch (e) {}
+//     require('bootstrap-sass');
+// } catch (e) {}
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -35,6 +37,12 @@ if (token) {
     window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 } else {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+}
+
+
+window.events = new Vue();
+window.flash = function(message) {
+    window.events.$emit('flash', message);
 }
 
 /**
