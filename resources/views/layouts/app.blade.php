@@ -18,11 +18,21 @@
             margin-bottom: 100px;
         }
 
+        .flex {
+            display: flex;
+        }
+
         .level {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+
+        .mr-1 { margin-right: 10px; }
+
+        [v-cloak] { display: none; }
+
+        
     </style>
 </head>
 <body>

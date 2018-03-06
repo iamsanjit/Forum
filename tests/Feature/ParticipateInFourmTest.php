@@ -85,4 +85,40 @@ class ParticipateInFourmTest extends TestCase
         
         $this->assertDatabaseMissing('replies', $reply->toArray());
     }
+
+    /** @test */
+    public function an_unauthorized_user_can_not_update_a_thread()
+    {
+        // $this->withoutExceptionHandling();
+        $reply = create(Reply::class);
+
+        $this->patch("replies/{$reply->id}", ['body' => 'New body here'])
+            ->assertRedirect('login');
+
+        $this->signIn();
+
+        $this->patch("replies/{$reply->id}", ['body' => 'New body here'])
+            ->assertStatus(403);
+
+    }
+
+    /** @test */
+    public function an_authorized_user_can_update_a_reply()
+    {
+        $this->withoutExceptionHandling();
+        $user = $this->signIn();
+
+        $reply = create(Reply::class, ['user_id' => $user->id]);
+
+        $updatedReply = 'You have changed, fool!';
+
+        $this->patch("replies/{$reply->id}", [
+            'body' => $updatedReply
+        ]);
+
+        $this->assertDatabaseHas('replies', [
+            'id' => $reply->id,
+            'body' => $updatedReply
+        ]);
+    }
 }
