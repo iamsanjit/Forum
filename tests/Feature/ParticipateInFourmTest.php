@@ -56,4 +56,33 @@ class ParticipateInFourmTest extends TestCase
         $this->withoutExceptionHandling();
         $this->post($this->thread->path() . '/replies', []);
     }
+
+    /** @test */
+    public function an_unauthorized_user_can_not_delete_a_thread()  
+    {
+        // $this->withoutExceptionHandling();
+        $reply = create(Reply::class);
+        
+        $this->delete("replies/{$reply->id}")
+        ->assertRedirect('login');
+
+        $this->signIn();
+
+        $this->delete("replies/{$reply->id}")
+            ->assertStatus(403);        
+
+    }
+
+    /** @test */
+    public function an_authorized_user_can_delete_a_reply()
+    {
+        $this->withoutExceptionHandling();
+        $user = $this->signIn();
+
+        $reply = create(Reply::class, ['user_id' => $user->id]);
+
+        $this->delete("replies/{$reply->id}");
+        
+        $this->assertDatabaseMissing('replies', $reply->toArray());
+    }
 }
