@@ -1,5 +1,6 @@
 <reply :attributes="{{ $reply }}" inline-template v-cloak>
     <div id="reply-{{ $reply->id }}" class="panel panel-default">
+        
         <div class="panel-heading level">
             <div>
                 <a href="#">
@@ -14,6 +15,7 @@
                 </button>
             </form>
         </div>
+
         <div class="panel-body">
             <div v-if="editing">
                 <div class="form-group">
@@ -29,14 +31,8 @@
         
         @can('update', $reply)
             <div class="panel-footer flex">
-
                 <button class="btn btn-sm btn-secondary mr-1" @click="editing = true">Edit</button>
-
-                <form action="{{ route('replies.destroy', [$reply]) }}" method="POST">
-                    {{ csrf_field() }}
-                    {{ method_field('DELETE') }}
-                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                </form>
+                <button class="btn btn-sm btn-danger" @click="destroy">Delete</button>
             </div>
         @endCan
     </div>
