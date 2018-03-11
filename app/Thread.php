@@ -42,7 +42,10 @@ class Thread extends Model
 
     public function addReply($reply)
     {
-        $this->replies()->create($reply);
+        $this->replies()->create([
+            'user_id' => $reply['user_id'],
+            'body' => $reply['body']
+        ]);
     }
 
     public function getFormattedRepliesAttribute()

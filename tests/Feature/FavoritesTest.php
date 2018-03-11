@@ -48,4 +48,31 @@ class FavoritesTest extends TestCase
 
         $this->assertEquals(1, $reply->fresh()->favorites()->count());
     }
+
+    /** @test */
+    public function an_unauthorized_user_can_not_unfavorite_a_reply()
+    {
+        $reply = create(Reply::class);
+
+        $this->delete("/replies/{$reply->id}/favorites")
+            ->assertRedirect('login');
+
+        $this->assertEquals(0, $reply->favorites()->count());
+    }
+
+    /** @test */
+    public function an_authorized_user_can_unfavorite_a_reply()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->signIn();
+
+        $reply = create(Reply::class);
+
+        $reply->favorite();
+
+        $this->delete("/replies/{$reply->id}/favorites");
+
+        $this->assertEquals(0, $reply->favorites()->count());
+    }
 }

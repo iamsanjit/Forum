@@ -50,6 +50,7 @@ class ThreadTest extends TestCase
     /** @test */
     public function a_thread_can_add_reply()
     {
+        $this->withoutExceptionHandling();
         $reply = make(Reply::class);
 
         $this->thread->addReply($reply->toArray());
