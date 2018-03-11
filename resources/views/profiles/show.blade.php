@@ -12,14 +12,16 @@
                 </h2>
             </div>
 
-            @foreach($activities as $date => $activitiesGroup)
+            @forelse($activities as $date => $activitiesGroup)
                 <div class="page-header">{{$date}}</div>
                 @foreach($activitiesGroup as $activity)
                     @if(view()->exists("profiles.activities.{$activity->type}"))
                         @include("profiles.activities.{$activity->type}")
                     @endIf
                 @endforeach
-            @endforeach
+            @empty
+                <div class="text-center">No activity.</div>
+            @endforelse
         </div>
     </div>
 

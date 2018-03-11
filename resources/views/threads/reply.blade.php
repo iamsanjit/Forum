@@ -7,14 +7,9 @@
                     {{ $reply->owner->name }}
                 </a> said {{ $reply->created_at->diffForHumans() }} ...
             </div>
-            <favorite :reply="{{ $reply }}"></favorite>
-            <!-- <form method = "POST" action="{{ '/replies/' . $reply->id . '/favorites' }}">
-                {{ csrf_field() }}
-
-                <button type="submit" {{ $reply->isFavorited() ? 'disabled' : ''}}>
-                    {{ $reply->favorites_count }} Favorite
-                </button>
-            </form> -->
+            @auth
+                <favorite :reply="{{ $reply }}"></favorite>
+            @endauth
         </div>
 
         <div class="panel-body">
